@@ -1,37 +1,37 @@
 <template>
     <div class="container">
         <BlueprintEditor ref="renderer"
-            v-model:selectedBuildingIndex="selectedBuildingIndex"
-            @update:selectedBuildingIndex="i => buildingFocused(i !== null)" />
+                         v-model:selectedBuildingIndex="selectedBuildingIndex"
+                         @update:selectedBuildingIndex="i => buildingFocused(i !== null)"/>
         <div class="sidebar" :class="{ expanded: expandSidebar }">
             <div>
                 <div class="info-tab tab"
-                    :class="{ active: activeTab === 'info'}"
-                    @click="activeTab = 'info'"></div>
+                     :class="{ active: activeTab === 'info'}"
+                     @click="activeTab = 'info'"></div>
                 <div class="operations-tab tab"
-                    :class="{ active: activeTab === 'operations'}"
-                    @click="activeTab = 'operations'"></div>
+                     :class="{ active: activeTab === 'operations'}"
+                     @click="activeTab = 'operations'"></div>
             </div>
             <div v-if="activeTab === 'info'">
                 <section style="display: flex; flex-direction: row; gap: 5px;">
                     <div>
-                        <label for="iconLayout">{{t('图标布局')}}</label>
+                        <label for="iconLayout">{{ t('图标布局') }}</label>
                         <select id="iconLayout" :disabled="!data"
                                 v-model="iconLayout">
-                            <option v-for="[id, s] of allIconLayouts" :key="id" :value="id">{{s}}</option>
+                            <option v-for="[id, s] of allIconLayouts" :key="id" :value="id">{{ s }}</option>
                         </select>
-                        <label for="shortDesc">{{t('缩略图文字')}}</label>
+                        <label for="shortDesc">{{ t('缩略图文字') }}</label>
                         <input type="text" id="shortDesc" :disabled="!data"
-                            :value="data?.header.shortDesc"
-                            @input="e => data!.header.shortDesc = (e.target as HTMLInputElement).value">
+                               :value="data?.header.shortDesc"
+                               @input="e => data!.header.shortDesc = (e.target as HTMLInputElement).value">
                     </div>
                     <BlueprintIcon style="height: 90px; flex: none;" :layout-id="iconLayout" :icons="data?.header.icons"/>
                 </section>
                 <section>
-                    <label for="desc">{{t('蓝图介绍')}}</label>
+                    <label for="desc">{{ t('蓝图介绍') }}</label>
                     <textarea rows="2" id="desc" :disabled="!data"
-                            :value="data?.header.desc"
-                            @input="e => data!.header.desc = (e.target as HTMLInputElement).value"
+                              :value="data?.header.desc"
+                              @input="e => data!.header.desc = (e.target as HTMLInputElement).value"
                     ></textarea>
                 </section>
                 <section>
@@ -41,20 +41,20 @@
                         <button style="margin-left: 4px;" @click="paste" :disabled="working">{{ t('粘贴') }}</button>
                     </div>
                     <textarea class="bp-code" rows="3" id="bp-str" v-model="bpStrInput"
-                            @copy="onCopy" @cut="onCut" @paste="onPaste"
-                            @focus="encodeBp" @change="e => parseBp((e.target as HTMLTextAreaElement).value)">
+                              @copy="onCopy" @cut="onCut" @paste="onPaste"
+                              @focus="encodeBp" @change="e => parseBp((e.target as HTMLTextAreaElement).value)">
                     </textarea>
                     <div class="row" style="align-items: stretch; column-gap: 4px;">
                         <button @click="parseBp('')" :disabled="working"
-                                style="position: relative; flex: auto; width: 50px;" >
+                                style="position: relative; flex: auto; width: 50px;">
                             {{ bpStr ? t("清空") : t("选择文件") }}
                             <input v-if="!bpStr" @change="onBpFile" :disabled="working"
-                                type="file" accept="text/plain" id="blueprint-file"
-                                style="position: absolute; inset: 0; opacity: 0;" />
+                                   type="file" accept="text/plain" id="blueprint-file"
+                                   style="position: absolute; inset: 0; opacity: 0;"/>
                         </button>
                         <a v-if="bpStr && data" class="button" @click="prepareSave"
-                            :href="bpUrl" :download="data.header.shortDesc + '.txt'"
-                            style="flex: auto; width: 50px;" >
+                           :href="bpUrl" :download="data.header.shortDesc + '.txt'"
+                           style="flex: auto; width: 50px;">
                             {{ t("保存文件") }}
                         </a>
                     </div>
@@ -62,17 +62,17 @@
                 </section>
                 <section>
                     <div class="row">
-                        <span style="margin-right: auto;">{{t('创建版本号')}}</span>
+                        <span style="margin-right: auto;">{{ t('创建版本号') }}</span>
                         <span>{{ data?.header.gameVersion }}</span>
                     </div>
                     <div class="row">
-                        <span style="margin-right: auto;">{{t('创建时间')}}</span>
-                        <span>{{ data?.header.time.toLocaleString([], { timeZone: 'UTC' }) }}</span>
+                        <span style="margin-right: auto;">{{ t('创建时间') }}</span>
+                        <span>{{ data?.header.time.toLocaleString([], {timeZone: 'UTC'}) }}</span>
                     </div>
                 </section>
                 <section>
-                    <BuildingInfoPanel v-if="selectedBuilding !== null" :building="selectedBuilding" />
-                    <BuildingOverview v-else-if="data" />
+                    <BuildingInfoPanel v-if="selectedBuilding !== null" :building="selectedBuilding"/>
+                    <BuildingOverview v-else-if="data"/>
                 </section>
             </div>
             <ul class="operations" v-else-if="activeTab === 'operations'">
@@ -104,7 +104,7 @@
                             Languages
                         </label>
                         <select id="select-language" v-model="lang">
-                            <option value="auto">{{t('自动选择语言')}}</option>
+                            <option value="auto">{{ t('自动选择语言') }}</option>
                             <option value="en">English</option>
                             <option value="zh">中文</option>
                         </select>
@@ -112,31 +112,35 @@
                 </li>
             </ul>
             <footer>
-                {{ version }}<SWStatus />
+                {{ version }}
+                <SWStatus/>
             </footer>
         </div>
         <button class="expand-btn" :class="{ expanded: expandSidebar }"
-                @click="expandSidebar = !expandSidebar" ></button>
+                @click="expandSidebar = !expandSidebar"></button>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, onUnmounted, provide, reactive, ref, shallowReactive, shallowRef, watch, watchEffect } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { BlueprintData, fromStr, toStr } from '@/blueprint/parser';
-import { version, rendererKey, buildingInfoKey, commandQueueKey } from '@/define';
-import { BuildingInfo } from './blueprint/buildingInfo';
+import {computed, defineAsyncComponent, onMounted, onUnmounted, provide, reactive, ref, shallowReactive, shallowRef, watch, watchEffect} from 'vue';
+import {useI18n} from 'vue-i18n';
+import {BlueprintData, fromStr, toStr} from '@/blueprint/parser';
+import {version, rendererKey, buildingInfoKey, commandQueueKey} from '@/define';
+import {BuildingInfo} from './blueprint/buildingInfo';
 
 import BuildingInfoPanel from './components/BuildingInfoPanel.vue';
 import SWStatus from '@/swStatus.vue';
 import BlueprintIcon from './components/BlueprintIcon.vue';
 import ReplaceModal from './components/ReplaceModal.vue';
-import { CommandQueue } from './command';
+import {CommandQueue} from './command';
 import BuildingOverview from './components/BuildingOverview.vue';
-import { useLang } from './i18n';
+import {useLang} from './i18n';
+import axios from "axios";
+import {Api} from "@/data/api";
+
 const BlueprintEditor = defineAsyncComponent(() => import(/* webpackChunkName: "renderer" */'./components/BlueprintEditor.vue'));
 
-const { t } = useI18n();
+const {t} = useI18n();
 const lang = useLang();
 
 const renderer = ref<null | InstanceType<typeof BlueprintEditor>>(null);
@@ -185,7 +189,7 @@ const buildingInfo = computed(() => {
 provide(buildingInfoKey, buildingInfo);
 
 const allIconLayouts = new Map<number, string>([
-    [ 1, '无'],
+    [1, '无'],
     [10, '1-1'], [11, '1-2'],
     [20, '2-1'], [21, '2-2'], [22, '2-3'], [23, '2-4'], [24, '2-5'],
     [30, '3-1'], [31, '3-2'], [32, '3-3'], [33, '3-4'],
@@ -193,8 +197,12 @@ const allIconLayouts = new Map<number, string>([
     [50, '5-1'], [51, '5-2'],
 ]);
 const iconLayout = computed<number>({
-    get() { return data.value?.header.layout ?? 0; },
-    set(v) { data.value!.header.layout = v; },
+    get() {
+        return data.value?.header.layout ?? 0;
+    },
+    set(v) {
+        data.value!.header.layout = v;
+    },
 })
 
 const encodeBp = () => {
@@ -230,7 +238,7 @@ watchEffect(() => {
 })
 const prepareSave = () => {
     if (!bpUrl.value) {
-        bpUrl.value = URL.createObjectURL(new Blob([bpStrLatest()], { type: 'text/plain' }));
+        bpUrl.value = URL.createObjectURL(new Blob([bpStrLatest()], {type: 'text/plain'}));
     }
 }
 onUnmounted(() => {
@@ -330,7 +338,29 @@ const hotkey = (event: KeyboardEvent) => {
         }
     }
 }
-onMounted(() => document.body.addEventListener('keydown', hotkey));
+const paraInit = () => {
+
+    //获取url参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlBp = urlParams.get('bp');
+    console.log(urlBp)
+    if (urlBp) {
+        //根据参数请求蓝图内容
+        axios.get<Api>('https://api.wandhi.com/api/tools/dsb/?id=' + urlBp).then((res) => {
+            console.log(res)
+            if (res.status && res.data) {
+                parseBp(res.data.data.blueprint);
+            }
+        });
+
+        //配置蓝图内容渲染蓝图
+    }
+}
+onMounted(() => {
+    document.body.addEventListener('keydown', hotkey)
+    paraInit()
+});
+
 onUnmounted(() => document.body.removeEventListener('keydown', hotkey));
 </script>
 
@@ -342,7 +372,7 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .container {
@@ -375,9 +405,11 @@ body {
         opacity: 1.0;
     }
 }
+
 .info-tab {
     background: url(@/assets/icons/menu.svg) center no-repeat;
 }
+
 .operations-tab {
     background: url(@/assets/icons/settings.svg) center no-repeat;
 }
@@ -453,6 +485,7 @@ body {
         box-sizing: border-box;
         resize: none;
         color: inherit;
+
         &:focus {
             background: #4f6671;
         }
@@ -468,7 +501,8 @@ ul.operations {
     display: flex;
     flex-direction: column;
     flex: auto;
-    >li {
+
+    > li {
         display: block;
         list-style: none;
         border-bottom: 1px solid #fff6;
@@ -487,6 +521,7 @@ ul.operations {
                 opacity: 0.5;
             }
         }
+
         img {
             vertical-align: middle;
         }
@@ -495,7 +530,8 @@ ul.operations {
 
 .select-li {
     display: flex;
-    >select {
+
+    > select {
         margin-left: 5px;
         flex: 1 100px;
     }
@@ -511,7 +547,6 @@ ul.operations {
         "清空": "清空",
         "复制粘贴不支持": "不支持，请手动复制",
         "保存文件": "保存文件",
-
         "批量替换": "批量替换",
         "撤销": "撤销",
         "重做": "重做",
@@ -524,11 +559,10 @@ ul.operations {
         "清空": "Clear",
         "复制粘贴不支持": "Not supported, please copy manually",
         "保存文件": "Save File",
-
         "批量替换": "Batch Replace",
         "撤销": "Undo",
         "重做": "Redo",
         "自动选择语言": "Auto Select"
-    },
+    }
 }
 </i18n>
