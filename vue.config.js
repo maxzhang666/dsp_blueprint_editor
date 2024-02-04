@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const { execSync } = require('child_process')
 
 module.exports = defineConfig({
-    publicPath: '/dsp_blueprint_editor/',
+    publicPath: '/',
     transpileDependencies: false,
     configureWebpack: {
         module: {
