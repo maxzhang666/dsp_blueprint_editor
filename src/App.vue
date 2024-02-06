@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <LoadingLayer v-if="load"></LoadingLayer>
         <BlueprintEditor ref="renderer"
                          v-model:selectedBuildingIndex="selectedBuildingIndex"
                          @update:selectedBuildingIndex="i => buildingFocused(i !== null)"/>
@@ -137,6 +138,7 @@ import BuildingOverview from './components/BuildingOverview.vue';
 import {useLang} from './i18n';
 import axios from "axios";
 import {Api} from "@/data/api";
+import LoadingLayer from "@/components/LoadingLayer.vue";
 
 const BlueprintEditor = defineAsyncComponent(() => import(/* webpackChunkName: "renderer" */'./components/BlueprintEditor.vue'));
 
@@ -338,6 +340,7 @@ const hotkey = (event: KeyboardEvent) => {
         }
     }
 }
+let load = false;
 const paraInit = () => {
 
     //获取url参数
@@ -345,12 +348,16 @@ const paraInit = () => {
     const urlBp = urlParams.get('bp');
     console.log(urlBp)
     if (urlBp) {
+        load = true
         //根据参数请求蓝图内容
         axios.get<Api>('https://api.wandhi.com/api/tools/dsb/?id=' + urlBp).then((res) => {
             console.log(res)
+            load = false
             if (res.status && res.data) {
                 parseBp(res.data.data.blueprint);
             }
+        }).finally(() => {
+            load = false
         });
 
         //配置蓝图内容渲染蓝图

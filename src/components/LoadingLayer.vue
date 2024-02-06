@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-    <div v-if="visible">
+    <div class="loading-mask">
         <div class="box-of-star1">
             <div class="star star-position1"></div>
             <div class="star star-position2"></div>
@@ -57,6 +57,19 @@ defineProps<{
 </template>
 
 <style scoped lang="css">
+.loading-mask {
+    position: fixed; /* 固定定位，覆盖整个屏幕 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8); /* 黑色背景，50%透明度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 确保遮罩层在其他内容上方 */
+}
+
 @-webkit-keyframes snow {
     0% {
         opacity: 0;
