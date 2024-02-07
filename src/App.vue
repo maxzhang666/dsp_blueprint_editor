@@ -346,11 +346,12 @@ const paraInit = () => {
     //获取url参数
     const urlParams = new URLSearchParams(window.location.search);
     const urlBp = urlParams.get('bp');
+    const type = urlParams.get('type') ?? 'cn'
     console.log(urlBp)
     if (urlBp) {
         load = true
         //根据参数请求蓝图内容
-        axios.get<Api>('https://api.wandhi.com/api/tools/dsb/?id=' + urlBp).then((res) => {
+        axios.get<Api>(`https://api.wandhi.com/api/tools/dsb/?id=${urlBp}&type=${type}`).then((res) => {
             console.log(res)
             load = false
             if (res.status && res.data) {
