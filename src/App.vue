@@ -351,7 +351,7 @@ const paraInit = () => {
     if (urlBp) {
         load = true
         //根据参数请求蓝图内容
-        axios.get<Api>(`https://api.wandhi.com/api/tools/dsb/?id=${urlBp}&type=${type}`).then((res) => {
+        axios.get<Api>(`https://api.huizhek.com/api/tools/dsb/?id=${urlBp}&type=${type}`).then((res) => {
             console.log(res)
             load = false
             if (res.status && res.data) {
