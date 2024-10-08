@@ -43,4 +43,6 @@ if (process.env.NODE_ENV !== 'development' && 'serviceWorker' in navigator) {
 
 <template>
     <span>{{status}} <a v-if="upgradeReady" href="#" @click.prevent="upgrade()">刷新</a></span>
+    <br>
+    <span><a style="color: white" href="https://www.dsp2b.com/">蓝图站</a></span>
 </template>
